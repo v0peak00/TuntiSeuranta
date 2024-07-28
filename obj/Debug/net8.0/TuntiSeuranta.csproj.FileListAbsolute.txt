@@ -1,0 +1,14 @@
+C:\Users\Kotikone\Documents\TuntiSeuranta\bin\Debug\net8.0\TuntiSeuranta.exe
+C:\Users\Kotikone\Documents\TuntiSeuranta\bin\Debug\net8.0\TuntiSeuranta.deps.json
+C:\Users\Kotikone\Documents\TuntiSeuranta\bin\Debug\net8.0\TuntiSeuranta.runtimeconfig.json
+C:\Users\Kotikone\Documents\TuntiSeuranta\bin\Debug\net8.0\TuntiSeuranta.dll
+C:\Users\Kotikone\Documents\TuntiSeuranta\bin\Debug\net8.0\TuntiSeuranta.pdb
+C:\Users\Kotikone\Documents\TuntiSeuranta\obj\Debug\net8.0\TuntiSeuranta.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\Kotikone\Documents\TuntiSeuranta\obj\Debug\net8.0\TuntiSeuranta.AssemblyInfoInputs.cache
+C:\Users\Kotikone\Documents\TuntiSeuranta\obj\Debug\net8.0\TuntiSeuranta.AssemblyInfo.cs
+C:\Users\Kotikone\Documents\TuntiSeuranta\obj\Debug\net8.0\TuntiSeuranta.csproj.CoreCompileInputs.cache
+C:\Users\Kotikone\Documents\TuntiSeuranta\obj\Debug\net8.0\TuntiSeuranta.dll
+C:\Users\Kotikone\Documents\TuntiSeuranta\obj\Debug\net8.0\refint\TuntiSeuranta.dll
+C:\Users\Kotikone\Documents\TuntiSeuranta\obj\Debug\net8.0\TuntiSeuranta.pdb
+C:\Users\Kotikone\Documents\TuntiSeuranta\obj\Debug\net8.0\TuntiSeuranta.genruntimeconfig.cache
+C:\Users\Kotikone\Documents\TuntiSeuranta\obj\Debug\net8.0\ref\TuntiSeuranta.dll
