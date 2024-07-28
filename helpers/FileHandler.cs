@@ -98,4 +98,9 @@ public class FileHandler : IFileHandler
             ReadFileToStringArray();
         }
     }
+
+    public string GetFilePath()
+    {
+        return _filePath;
+    }
 }
