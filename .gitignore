@@ -1,0 +1,16 @@
+# Ignore build and debug artifacts
+bin/
+obj/
+*.pdb
+*.exe
+
+# Ignore other temporary or unwanted files
+*.tmp
+*.log
+
+# Ignore dependency directories
+node_modules/
+packages/
+
+# Other files
+tunnit.txt
