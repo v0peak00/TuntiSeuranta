@@ -5,4 +5,5 @@ public interface IFileHandler
     void DisplayHoursForDate();
     bool HasHoursForDate(DateTime date);
     void ModifyHoursForDate(TimeSpan start, TimeSpan end);
+    string GetFilePath();
 }

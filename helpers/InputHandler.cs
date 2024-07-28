@@ -9,33 +9,54 @@ public class InputHandler
         _fileHandler = fileHandler;
     }
 
-    public DateTime GetDateInputFromUser()
+    private bool GetInputWithExitOption(string prompt, Func<string, bool> tryParse, out string result)
     {
-        Console.Write("Syötä PVM (pp.kk.vvvv): ");
-        string dateInput = Console.ReadLine();
-        DateTime date;
+        Console.Write(prompt + " tai 'q' palataksesi päävalikkoon: ");
+        result = Console.ReadLine();
 
-        while (!DateTime.TryParseExact(dateInput, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out date))
+        if (result.Trim().ToLower() == "q")
         {
-            Console.Write("Virheellinen PVM muoto. Syötä PVM (pp.kk.vvvv): ");
-            dateInput = Console.ReadLine();
+            return false;
         }
 
-        return date;
+        while (!tryParse(result))
+        {
+            Console.Write("Virheellinen muoto. " + prompt + " tai 'q' palataksesi päävalikkoon: ");
+            result = Console.ReadLine();
+
+            if (result.Trim().ToLower() == "q")
+            {
+                return false;
+            }
+        }
+
+        return true;
     }
 
-    public TimeSpan GetTimeInputFromUser(string prompt)
+     public bool TryGetDateInput(out DateTime date)
     {
-        Console.Write(prompt);
-        string timeInput = Console.ReadLine();
-        TimeSpan time;
-        
-        while (!TimeSpan.TryParse(timeInput, out time))
+        DateTime tempDate = default;
+        bool success = GetInputWithExitOption("Syötä PVM (pp.kk.vvvv)", input =>
         {
-            Console.Write("Virheellinen ajan muoto. " + prompt);
-            timeInput = Console.ReadLine();
-        }
-        return time;
+            bool parseSuccess = DateTime.TryParseExact(input, "dd.MM.yyyy", CultureInfo.InvariantCulture, DateTimeStyles.None, out tempDate);
+            return parseSuccess;
+        }, out string _);
+
+        date = success ? tempDate : default;
+        return success;
+    }
+
+     public bool TryGetTimeInput(string prompt, out TimeSpan time)
+    {
+        TimeSpan tempTime = default;
+        bool success = GetInputWithExitOption(prompt, input =>
+        {
+            bool parseSuccess = TimeSpan.TryParse(input, out tempTime);
+            return parseSuccess;
+        }, out string _);
+
+        time = success ? tempTime : default;
+        return success;
     }
 
     public void PromptUserToModifyHoursForDate(DateTime date)
@@ -53,8 +74,8 @@ public class InputHandler
 
         if (decision == "Y")
         {
-            TimeSpan startTime = GetTimeInputFromUser("Töiden aloitus (tt:mm): ");
-            TimeSpan endTime = GetTimeInputFromUser("Töiden lopetus (HH:mm): ");
+            if (!TryGetTimeInput("Töiden aloitus (tt:mm): ", out TimeSpan startTime)) return;
+            if (!TryGetTimeInput("Töiden lopetus (tt:mm): ", out TimeSpan endTime)) return;
             _fileHandler.ModifyHoursForDate(startTime, endTime);
         }
         else if(decision == "N")

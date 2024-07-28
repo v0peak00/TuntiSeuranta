@@ -1,4 +1,0 @@
-PVM: 24.06.2024 | Aloitus: 06:00:00 | Lopetus: 13:00:00 | Työtunnit: 7h | Ylityöt: 0h | 100%: 7 | 150%: 0 | 200%: 0 | 
------
-PVM: 25.06.2024 | Aloitus: 03:00:00 | Lopetus: 12:00:00 | Työtunnit: 12h | Ylityöt: 4h | 100%: 8 | 150%: 2 | 200%: 2 | 
------
