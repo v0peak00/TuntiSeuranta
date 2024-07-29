@@ -6,4 +6,5 @@ public interface IFileHandler
     bool HasHoursForDate(DateTime date);
     void ModifyHoursForDate(TimeSpan start, TimeSpan end);
     string GetFilePath();
+    List<WorkHours> ReadWorkHoursFromFile();
 }
