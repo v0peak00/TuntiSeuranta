@@ -33,7 +33,7 @@ public class InputHandler
         return true;
     }
 
-     public bool TryGetDateInput(out DateTime date)
+    public bool TryGetDateInput(out DateTime date)
     {
         DateTime tempDate = default;
         bool success = GetInputWithExitOption("Syötä PVM (pp.kk.vvvv)", input =>
@@ -46,7 +46,7 @@ public class InputHandler
         return success;
     }
 
-     public bool TryGetTimeInput(string prompt, out TimeSpan time)
+    public bool TryGetTimeInput(string prompt, out TimeSpan time)
     {
         TimeSpan tempTime = default;
         bool success = GetInputWithExitOption(prompt, input =>
@@ -59,29 +59,36 @@ public class InputHandler
         return success;
     }
 
-    public void PromptUserToModifyHoursForDate(DateTime date)
+    public bool PromptUserToModifyHoursForDate(DateTime date)
     {
         Console.WriteLine($"Olemassa olevia tunteja löytyi PVM: {date:dd.MM.yyyy}");
         _fileHandler.DisplayHoursForDate();
-        Console.Write("Haluatko muokata näitä tunteja Y/N? ");
+        Console.Write("Haluatko muokata näitä tunteja Y/N tai 'q' palataksesi päävalikkoon? ");
         string decision = Console.ReadLine().ToUpper();
 
-        while (decision != "Y" && decision != "N")
+        while (decision != "Y" && decision != "N" && decision != "Q")
         {
-            Console.Write("Virheellinen valinta. Syötä 'Y' muokataksesi tunteja tai 'N' palataksesi takaisin: ");
+            Console.Write("Virheellinen valinta. Syötä 'Y' muokataksesi tunteja, 'N' palataksesi takaisin, tai 'q' palataksesi päävalikkoon: ");
             decision = Console.ReadLine().ToUpper();
         }
 
         if (decision == "Y")
         {
-            if (!TryGetTimeInput("Töiden aloitus (tt:mm): ", out TimeSpan startTime)) return;
-            if (!TryGetTimeInput("Töiden lopetus (tt:mm): ", out TimeSpan endTime)) return;
+            if (!TryGetTimeInput("Töiden aloitus (tt:mm): ", out TimeSpan startTime)) return false;
+            if (!TryGetTimeInput("Töiden lopetus (tt:mm): ", out TimeSpan endTime)) return false;
             _fileHandler.ModifyHoursForDate(startTime, endTime);
+            return true; // Continue modifying hours
         }
-        else if(decision == "N")
+        else if (decision == "N")
         {
             Console.WriteLine("Palataan työaikamerkintä näkymään.");
-            return;
+            return true; // Continue to modify or add hours
         }
+        else if (decision == "Q")
+        {
+            return false; // Exit to menu
+        }
+
+        return true;
     }
 }
