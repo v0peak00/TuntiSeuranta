@@ -13,22 +13,26 @@ namespace Helpers
 
         public void RunSession()
         {
-            _fileHandler.DisplayPreviousHours();
-            if (!_inputHandler.TryGetDateInput(out DateTime dateInput)) return;
-            bool hoursForDateExists = _fileHandler.HasHoursForDate(dateInput);
-
-            while (hoursForDateExists)
+            while (true)
             {
-                _inputHandler.PromptUserToModifyHoursForDate(dateInput);
                 _fileHandler.DisplayPreviousHours();
-                if (!_inputHandler.TryGetDateInput(out dateInput)) return;
-                hoursForDateExists = _fileHandler.HasHoursForDate(dateInput);
-            }
+                if (!_inputHandler.TryGetDateInput(out DateTime dateInput)) return;
 
-            if (!_inputHandler.TryGetTimeInput("Töiden aloitus (tt:mm): ", out TimeSpan startTimeInput)) return;
-            if (!_inputHandler.TryGetTimeInput("Töiden lopetus (tt:mm): ", out TimeSpan endTimeInput)) return;
-            WorkHours workHours = HoursCalculator.CalculateHours(dateInput, startTimeInput, endTimeInput);
-            _fileHandler.SaveResultToFile(workHours);
+                bool hoursForDateExists = _fileHandler.HasHoursForDate(dateInput);
+
+                if (hoursForDateExists)
+                {
+                    _inputHandler.PromptUserToModifyHoursForDate(dateInput);
+                }
+                else
+                {
+                    if (!_inputHandler.TryGetTimeInput("Töiden aloitus (tt:mm): ", out TimeSpan startTimeInput)) return;
+                    if (!_inputHandler.TryGetTimeInput("Töiden lopetus (tt:mm): ", out TimeSpan endTimeInput)) return;
+
+                    WorkHours workHours = HoursCalculator.CalculateHours(dateInput, startTimeInput, endTimeInput);
+                    _fileHandler.SaveResultToFile(workHours);
+                }
+            }
         }
     }
 }
