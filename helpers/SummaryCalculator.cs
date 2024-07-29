@@ -1,12 +1,8 @@
-using System;
-using System.Collections.Generic;
-using System.IO;
-
 public static class SummaryCalculator
 {
-    public static (double TotalYlityot, double Total100, double Total150, double Total200) CalculateSummary(string filePath)
+    public static (double TotalYlityot, double Total100, double Total150, double Total200) CalculateSummary(IFileHandler fileHandler)
     {
-        var workHours = ReadWorkHoursFromFile(filePath);
+        var workHours = fileHandler.ReadWorkHoursFromFile();
         double totalYlityot = 0, total100 = 0, total150 = 0, total200 = 0;
 
         foreach (var entry in workHours)
@@ -20,24 +16,9 @@ public static class SummaryCalculator
         return (totalYlityot, total100, total150, total200);
     }
 
-    private static List<WorkHours> ReadWorkHoursFromFile(string filePath)
+    public static void DisplaySummary(IFileHandler fileHandler)
     {
-        var workHoursList = new List<WorkHours>();
-        var lines = File.ReadAllLines(filePath);
-
-        foreach (var line in lines)
-        {
-            if (line.StartsWith("PVM"))
-            {
-                workHoursList.Add(WorkHours.ParseWorkHoursFromString(line));
-            }
-        }
-
-        return workHoursList;
-    }
-
-    public static void DisplaySummary((double TotalYlityot, double Total100, double Total150, double Total200) summary)
-    {
+        var summary = CalculateSummary(fileHandler);
         Console.WriteLine($"Yhteenveto:");
         Console.WriteLine($"Ylityöt: {summary.TotalYlityot}h");
         Console.WriteLine($"100%: {summary.Total100}h");

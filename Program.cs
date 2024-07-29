@@ -1,9 +1,12 @@
-﻿class Program
+﻿using Helpers;
+
+class Program
 {
     static void Main(string[] args)
     {
         IFileHandler fileHandler = new FileHandler();
         InputHandler inputHandler = new InputHandler(fileHandler);
+        SessionManager sessionManager = new SessionManager(fileHandler, inputHandler);
 
         while (true)
         {
@@ -17,10 +20,10 @@
             switch (choice)
             {
                 case "1":
-                    RunTimeTrackingSession(fileHandler, inputHandler);
+                    sessionManager.RunSession();
                     break;
                 case "2":
-                    DisplaySummary(fileHandler);
+                    SummaryCalculator.DisplaySummary(fileHandler);
                     break;
                 case "3":
                     return;
@@ -29,35 +32,5 @@
                     break;
             }
         }
-    }
-                
-
-    private static void RunTimeTrackingSession(IFileHandler fileHandler, InputHandler inputHandler)
-    {
-        fileHandler.DisplayPreviousHours();
-        
-        if (!inputHandler.TryGetDateInput(out DateTime dateInput)) return;
-        bool hoursForDateExists = fileHandler.HasHoursForDate(dateInput);
-
-        while (hoursForDateExists)
-        {
-            inputHandler.PromptUserToModifyHoursForDate(dateInput);
-            fileHandler.DisplayPreviousHours(); // To reflect the changes
-            if (!inputHandler.TryGetDateInput(out dateInput)) return;
-            hoursForDateExists = fileHandler.HasHoursForDate(dateInput);
-        }
-
-        if (!inputHandler.TryGetTimeInput("Töiden aloitus (tt:mm): ", out TimeSpan startTimeInput)) return;
-        if (!inputHandler.TryGetTimeInput("Töiden lopetus (tt:mm): ", out TimeSpan endTimeInput)) return;
-
-        WorkHours workHours = HoursCalculator.CalculateHours(dateInput, startTimeInput, endTimeInput);
-        
-        fileHandler.SaveResultToFile(workHours);
-    }
-
-     private static void DisplaySummary(IFileHandler fileHandler)
-    {
-        var summary = SummaryCalculator.CalculateSummary(fileHandler.GetFilePath());
-        SummaryCalculator.DisplaySummary(summary);
     }
 }

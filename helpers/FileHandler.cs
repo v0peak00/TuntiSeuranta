@@ -103,4 +103,19 @@ public class FileHandler : IFileHandler
     {
         return _filePath;
     }
+
+    public List<WorkHours> ReadWorkHoursFromFile()
+    {
+        var workHoursList = new List<WorkHours>();
+
+        foreach (var line in linesFromFile)
+        {
+            if (line.StartsWith("PVM"))
+            {
+                workHoursList.Add(WorkHours.ParseWorkHoursFromString(line));
+            }
+        }
+
+        return workHoursList;
+    }
 }
