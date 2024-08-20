@@ -1,8 +1,10 @@
+using TuntiSeuranta.WorkHoursManagement;
+
 public static class SummaryCalculator
 {
-    public static (double TotalYlityot, double Total100, double Total150, double Total200) CalculateSummary(IFileHandler fileHandler)
+    public static (double TotalYlityot, double Total100, double Total150, double Total200) CalculateSummary(WorkHoursService workHoursService)
     {
-        var workHours = fileHandler.ReadWorkHoursFromFile();
+        var workHours = workHoursService.GetAllWorkHours();
         double totalYlityot = 0, total100 = 0, total150 = 0, total200 = 0;
 
         foreach (var entry in workHours)
@@ -16,9 +18,9 @@ public static class SummaryCalculator
         return (totalYlityot, total100, total150, total200);
     }
 
-    public static void DisplaySummary(IFileHandler fileHandler)
+    public static void DisplaySummary(WorkHoursService workHoursService)
     {
-        var summary = CalculateSummary(fileHandler);
+        var summary = CalculateSummary(workHoursService);
         Console.WriteLine($"Yhteenveto:");
         Console.WriteLine($"Ylityöt: {summary.TotalYlityot}h");
         Console.WriteLine($"100%: {summary.Total100}h");

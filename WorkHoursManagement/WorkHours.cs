@@ -1,4 +1,5 @@
 using System.Globalization;
+namespace TuntiSeuranta.WorkHoursManagement;
 
 public class WorkHours
 {
@@ -21,11 +22,6 @@ public class WorkHours
                $"100%: {RegularHours} | " +
                $"150%: {Overtime150Hours} | " +
                $"200%: {Overtime200Hours} | ";
-    }
-
-    public void Display()
-    {
-        Console.WriteLine(ToString());
     }
 
     public static WorkHours ParseWorkHoursFromString(string workHours)

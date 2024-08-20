@@ -1,12 +1,17 @@
 using System.Globalization;
+using TuntiSeuranta.WorkHoursManagement;
+
+namespace TuntiSeuranta.InputHandling;
 
 public class InputHandler
 {
-    private readonly IFileHandler _fileHandler;
+    private readonly WorkHoursService _workHoursService;
+    private readonly WorkHoursDisplay _workHoursDisplay;
 
-    public InputHandler(IFileHandler fileHandler)
+    public InputHandler(WorkHoursService workHoursService, WorkHoursDisplay workHoursDisplay)
     {
-        _fileHandler = fileHandler;
+        _workHoursService = workHoursService ?? throw new ArgumentNullException(nameof(workHoursService));
+        _workHoursDisplay = workHoursDisplay ?? throw new ArgumentNullException(nameof(workHoursDisplay));
     }
 
     private bool GetInputWithExitOption(string prompt, Func<string, bool> tryParse, out string result)
@@ -59,11 +64,24 @@ public class InputHandler
         return success;
     }
 
-    public bool PromptUserToModifyHoursForDate(DateTime date)
+    public bool HandleDateInput(DateTime date)
     {
-        Console.WriteLine($"Olemassa olevia tunteja löytyi PVM: {date:dd.MM.yyyy}");
-        _fileHandler.DisplayHoursForDate();
-        Console.Write("Haluatko muokata näitä tunteja Y/N tai 'q' palataksesi päävalikkoon? ");
+        if (_workHoursService.WorkHoursExistsForDate(date))
+        {
+            return HandleExistingWorkHours(date);
+        }
+        else
+        {
+            return HandleNewWorkHours(date);
+        }
+    }
+
+    private bool HandleExistingWorkHours(DateTime date)
+    {
+        Console.WriteLine($"Tunteja löytyi PVM: {date:dd.MM.yyyy}");
+        _workHoursDisplay.DisplayHoursForDate(date);
+
+        Console.Write("Haluatko muokata näitä tunteja? Y/N tai 'q' palataksesi päävalikkoon: ");
         string decision = Console.ReadLine().ToUpper();
 
         while (decision != "Y" && decision != "N" && decision != "Q")
@@ -74,21 +92,33 @@ public class InputHandler
 
         if (decision == "Y")
         {
-            if (!TryGetTimeInput("Töiden aloitus (tt:mm): ", out TimeSpan startTime)) return false;
-            if (!TryGetTimeInput("Töiden lopetus (tt:mm): ", out TimeSpan endTime)) return false;
-            _fileHandler.ModifyHoursForDate(startTime, endTime);
-            return true; // Continue modifying hours
-        }
-        else if (decision == "N")
-        {
-            Console.WriteLine("Palataan työaikamerkintä näkymään.");
-            return true; // Continue to modify or add hours
+            return ModifyWorkHours(date);
         }
         else if (decision == "Q")
         {
             return false; // Exit to menu
         }
 
+        return true; // Continue to allow user input
+    }
+
+    private bool HandleNewWorkHours(DateTime date)
+    {
+        Console.WriteLine($"Ei löytynyt työaikamerkintöjä päivämäärälle: {date:dd.MM.yyyy}");
+
+        if (!TryGetTimeInput("Töiden aloitus (tt:mm): ", out TimeSpan startTime)) return false;
+        if (!TryGetTimeInput("Töiden lopetus (tt:mm): ", out TimeSpan endTime)) return false;
+
+        _workHoursService.AddNewWorkHours(date, startTime, endTime);
+        return true;
+    }
+
+    private bool ModifyWorkHours(DateTime date)
+    {
+        if (!TryGetTimeInput("Töiden aloitus (tt:mm): ", out TimeSpan startTime)) return false;
+        if (!TryGetTimeInput("Töiden lopetus (tt:mm): ", out TimeSpan endTime)) return false;
+
+        _workHoursService.ModifyWorkHours(date, startTime, endTime);
         return true;
     }
 }

@@ -1,12 +1,17 @@
-﻿using Helpers;
+﻿using TuntiSeuranta.FileHandling;
+using TuntiSeuranta.InputHandling;
+using TuntiSeuranta.WorkHoursManagement;
 
 class Program
 {
     static void Main(string[] args)
     {
         IFileHandler fileHandler = new FileHandler();
-        InputHandler inputHandler = new InputHandler(fileHandler);
-        SessionManager sessionManager = new SessionManager(fileHandler, inputHandler);
+        WorkHoursRepository workHoursRepository = new WorkHoursRepository(fileHandler);
+        WorkHoursService workHoursService = new WorkHoursService(workHoursRepository);
+        WorkHoursDisplay workHoursDisplay = new WorkHoursDisplay(workHoursService);
+        InputHandler inputHandler = new InputHandler(workHoursService, workHoursDisplay);
+        SessionManager sessionManager = new SessionManager(inputHandler, workHoursDisplay);
 
         while (true)
         {
@@ -23,7 +28,7 @@ class Program
                     sessionManager.RunSession();
                     break;
                 case "2":
-                    SummaryCalculator.DisplaySummary(fileHandler);
+                    SummaryCalculator.DisplaySummary(workHoursService);
                     break;
                 case "3":
                     return;

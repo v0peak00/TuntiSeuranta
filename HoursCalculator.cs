@@ -1,3 +1,4 @@
+using TuntiSeuranta.WorkHoursManagement;
 public static class HoursCalculator
 {
     public static WorkHours CalculateHours(DateTime date, TimeSpan startTime, TimeSpan endTime)
