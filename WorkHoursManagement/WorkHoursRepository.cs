@@ -22,6 +22,7 @@ public class WorkHoursRepository
 
     public void SaveAllWorkHours(List<WorkHours> workHours)
     {
+        workHours = workHours.OrderBy(wh => wh.Date).ToList();
         _fileHandler.SaveWorkHours(workHours);
     }
 
