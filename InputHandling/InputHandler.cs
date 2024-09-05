@@ -12,25 +12,63 @@ public class InputHandler
         _consoleHandler = consoleHandler ?? throw new ArgumentNullException(nameof(consoleHandler));
     }
 
-    public bool TryGetValidatedInput(out string input)
+    public DateTime GetValidatedDate(string prompt)
     {
-        input = string.Empty;
-
-        // Create validators
-        IInputValidator dateValidator = new DateValidator();
-        IInputValidator timeValidator = new TimeValidator();
-
-        dateValidator.SetNext(timeValidator);
-
-        input = _consoleHandler.ReadInput("Enter date (dd.MM.yyyy): ");
-
-        if (!dateValidator.Validate(input, out string errorMessage))
+        while (true)
         {
-            _consoleHandler.WriteMessage(errorMessage);
-            return false;
-        }
+            string input = _consoleHandler.ReadInput(prompt);
+            if (input.Trim().ToLower() == "q")
+            {
+                return default;
+            }
 
-        return true;
+            if (ValidationHelper.TryValidateDate(input, out DateTime date))
+            {
+                return date;
+            }
+
+            _consoleHandler.WriteMessage($"Syöte:'{input}' on virheellinen, käytä muotoa dd.mm.");
+        }
+    }
+
+    public TimeSpan GetValidatedTime(string prompt)
+    {
+        while (true)
+        {
+            string input = _consoleHandler.ReadInput(prompt);
+            if (input.Trim().ToLower() == "q")
+            {
+                return default;
+            }
+
+            if (ValidationHelper.TryValidateTime(input, out TimeSpan time))
+            {
+                return time;
+            }
+
+            _consoleHandler.WriteMessage($"Syöte:'{input}' on virheellinen, käytä muotoa hh:mm.");
+        }
+    }
+
+    public bool GetModifyHoursSelection(string prompt)
+    {
+        while (true)
+        {
+            string input = _consoleHandler.ReadInput(prompt);
+            if (input.Trim().ToLower() == "q")
+            {
+                return false;
+            }
+
+            if (input.Trim().ToLower() == "n")
+            {
+                return false;
+            }
+
+            if (input.Trim().ToLower() == "y")
+            {
+                return true;
+            }
+        }
     }
 }
-
