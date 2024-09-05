@@ -15,7 +15,18 @@ public class ConsoleHandler : IConsoleHandler
     public string ReadInput(string prompt)
     {
         WritePrompt(prompt);
-        string? userInput = Console.ReadLine(); // Nullable string
+        string? userInput = Console.ReadLine();
         return string.IsNullOrWhiteSpace(userInput) ? string.Empty : userInput;
     }
+
+    public void ExitToMenu()
+    {
+        Console.WriteLine("Palataan päävalikkoon");
+    }
+
+    public void ExitModifyingHours()
+    {
+        Console.WriteLine("Palataan tuntinäkymään");
+    }
+
 }
