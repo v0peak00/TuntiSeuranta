@@ -1,4 +1,5 @@
-﻿using TuntiSeuranta.FileHandling;
+﻿using TuntiSeuranta.ConsoleHandling;
+using TuntiSeuranta.FileHandling;
 using TuntiSeuranta.InputHandling;
 using TuntiSeuranta.WorkHoursManagement;
 
@@ -10,8 +11,9 @@ class Program
         WorkHoursRepository workHoursRepository = new WorkHoursRepository(fileHandler);
         WorkHoursService workHoursService = new WorkHoursService(workHoursRepository);
         WorkHoursDisplay workHoursDisplay = new WorkHoursDisplay(workHoursService);
-        InputHandler inputHandler = new InputHandler(workHoursService, workHoursDisplay);
-        SessionManager sessionManager = new SessionManager(inputHandler, workHoursDisplay);
+        IConsoleHandler consoleHandler = new ConsoleHandler();
+        InputHandler inputHandler = new InputHandler(consoleHandler);
+        SessionManager sessionManager = new SessionManager(workHoursService, workHoursDisplay, inputHandler, consoleHandler);
 
         while (true)
         {
