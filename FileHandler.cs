@@ -26,9 +26,9 @@ public class FileHandler : IFileHandler
         }
 
         var workHoursList = File.ReadAllLines(_filePath)
-                                .Where(line => line.StartsWith("PVM"))
-                                .Select(line => WorkHours.ParseWorkHoursFromString(line))
-                                .ToList();
+            .Where(line => line.StartsWith("PVM"))
+            .Select(line => WorkHours.ParseWorkHoursFromString(line))
+            .ToList();
 
         return workHoursList;
     }
